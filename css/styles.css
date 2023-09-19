@@ -1,0 +1,13 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(160, 160, 230);
+    padding: 0px;
+    margin: 0px;
+}
+
+#demo {
+    background-color: blue;
+    text-align: center;
+    margin: calc(50vw - 150px);
+}
