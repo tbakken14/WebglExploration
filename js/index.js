@@ -44,26 +44,39 @@ function getSourceCode() {
 
     sourceCode.fragmentShader = `#version 300 es
     precision highp float;
+    uniform vec4 u_color;
     out vec4 outputColor;
     void main() {
-    outputColor = vec4(.2, 0.0, .2, 1.0);
+        outputColor = u_color;
     }`;
     return sourceCode;
+}
+
+function randomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function createRectangle(gl, x1, y1, x2, y2) {
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        x1, y1,
+        x1, y2,
+        x2, y2,
+        x2, y2, 
+        x2, y1, 
+        x1, y1 ]), gl.STATIC_DRAW)
+}
+
+function paintCanvas() {
+    gl.clearColor(.08, .08, .08, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
 const canvas = document.getElementById("demo");
 canvas.width = 500;
 canvas.height = 500;
 const gl = getContext(canvas);
-/** 
-const vertices = [
-    0 , .5,
-    -.5, -.5,
-    .5, -.5,
-    .5, -.5,
-    0, .5,
-    .5, .5
-];*/
 
 const vertices = [
     50, 0,
@@ -79,23 +92,26 @@ const sourceCode = getSourceCode();
 //create shaders
 const vertexShader = createShader(gl, sourceCode.vertexShader, gl.VERTEX_SHADER);
 const fragmentShader = createShader(gl, sourceCode.fragmentShader, gl.FRAGMENT_SHADER);
-//create program
+//Set GPU program
 const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
 gl.useProgram(shaderProgram);
-const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
-gl.enableVertexAttribArray(vertexPositionAttributeLoc);
 
 //input assembler
 const geoBuffer = gl.createBuffer();
+const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
+gl.enableVertexAttribArray(vertexPositionAttributeLoc);
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+
+
 gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
-const cpuBuffer = new Float32Array(vertices);
-gl.bufferData(gl.ARRAY_BUFFER, cpuBuffer, gl.STATIC_DRAW);
-//vertex shader
-//fragment shader
+/**
+const shaderVertexInputBuffer = new Float32Array(vertices);
+gl.bufferData(gl.ARRAY_BUFFER, shaderVertexInputBuffer, gl.STATIC_DRAW);
+ */
 //rasterizer 
 gl.viewport(0, 0, canvas.width, canvas.height);
+
 gl.vertexAttribPointer(vertexPositionAttributeLoc, 
                        2, 
                        gl.FLOAT, 
@@ -103,9 +119,16 @@ gl.vertexAttribPointer(vertexPositionAttributeLoc,
                        2 * Float32Array.BYTES_PER_ELEMENT, 
                        0);
 
+gl.clearColor(.08, .08, .08, 1);
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+for (i = 0; i < 5; i++){ 
+    createRectangle(gl, randomInt(501), randomInt(501), randomInt(501), randomInt(501));
+    const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+    gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
 
-gl.drawArrays(gl.TRIANGLES, 0, 6);
-//gl.drawArrays(gl.TRIANGLES, 3, 3);
+
 
 
 
