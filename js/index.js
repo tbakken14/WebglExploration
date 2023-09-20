@@ -34,8 +34,12 @@ function getSourceCode() {
     sourceCode.vertexShader = `#version 300 es
     precision highp float;
     in vec2 pos;
+    uniform vec2 u_res;
     void main() {
-        gl_Position = vec4(pos, 0.0, 1.0);
+        vec2 zeroToOne = pos / u_res;
+        vec2 zeroToTwo = zeroToOne * 2.0;
+        vec2 clipSpace = zeroToTwo - 1.0;
+        gl_Position = vec4(clipSpace, 0, 1);
     }`;
 
     sourceCode.fragmentShader = `#version 300 es
@@ -51,7 +55,7 @@ const canvas = document.getElementById("demo");
 canvas.width = 500;
 canvas.height = 500;
 const gl = getContext(canvas);
-
+/** 
 const vertices = [
     0 , .5,
     -.5, -.5,
@@ -59,6 +63,15 @@ const vertices = [
     .5, -.5,
     0, .5,
     .5, .5
+];*/
+
+const vertices = [
+    50, 0,
+    0, 50,
+    50, 50,
+    100, 100,
+    200,200,
+    200,100
 ];
 
 const sourceCode = getSourceCode();
@@ -74,6 +87,8 @@ gl.enableVertexAttribArray(vertexPositionAttributeLoc);
 
 //input assembler
 const geoBuffer = gl.createBuffer();
+const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
+gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
 const cpuBuffer = new Float32Array(vertices);
 gl.bufferData(gl.ARRAY_BUFFER, cpuBuffer, gl.STATIC_DRAW);
