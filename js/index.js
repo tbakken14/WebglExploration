@@ -1,68 +1,84 @@
-const canvas = document.getElementById("demo");
-const gl = canvas.getContext("webgl2");
-if (!gl) {
-    alert("Webgl is not supported on this browser.");
+function createShader(gl, sourceCode, type) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, sourceCode);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        const info = gl.getShaderInfoLog(shader);
+        throw `Could not compile WebGL program. \n\n${info}`;
+    }
+    return shader;
 }
 
-console.log("hey");
-gl.clearColor(.5, .5, .5, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+function createShaderProgram(gl, vertexShader, fragmentShader) {
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        const info = gl.getProgramInfoLog(shaderProgram);
+        throw `Could not compile WebGL program. \n\n${info}`;
+    }
+    return shaderProgram;
+}
+
+function getContext(canvas) {
+    const gl = canvas.getContext("webgl2");
+    if (!gl) {
+        throw "Webgl is not supported on this browser.";
+    }
+    return gl;
+}
+
+function getSourceCode() {
+    let sourceCode = {};
+    sourceCode.vertexShader = `#version 300 es
+    precision highp float;
+    in vec2 pos;
+    void main() {
+        gl_Position = vec4(pos, 0.0, 1.0);
+    }`;
+
+    sourceCode.fragmentShader = `#version 300 es
+    precision highp float;
+    out vec4 outputColor;
+    void main() {
+    outputColor = vec4(.2, 0.0, .2, 1.0);
+    }`;
+    return sourceCode;
+}
+
+const canvas = document.getElementById("demo");
+canvas.width = 500;
+canvas.height = 500;
+const gl = getContext(canvas);
 
 const vertices = [
     0 , .5,
     -.5, -.5,
-    .5, -.5
+    .5, -.5,
+    .5, -.5,
+    0, .5,
+    .5, .5
 ];
 
-const cpuBuffer = new Float32Array(vertices);
-const geoBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, cpuBuffer, gl.STATIC_DRAW);
+const sourceCode = getSourceCode();
 
-const shaderSourceCode = `#version 300 es
-precision mediump float;
-in vec2 pos;
-void main() {
-    gl_Position = vec4(pos, 0.0, 1.0);
-}`;
-
-const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-gl.shaderSource(vertexShader, shaderSourceCode);
-gl.compileShader(vertexShader);
-if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-    alert(gl.getShaderInfoLog(vertexShader));
-}
-
-const fragmentShaderSourceCode = `#version 300 es
-precision mediump float;
-out vec4 outputColor;
-void main() {
-    outputColor = vec4(.2, 0.0, .2, 1.0);
-}`;
-
-const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-gl.shaderSource(fragmentShader, fragmentShaderSourceCode);
-gl.compileShader(fragmentShader);
-if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-    alert(gl.getShaderInfoLog(fragmentShader));
-}
-
-const shaderProgram = gl.createProgram();
-gl.attachShader(shaderProgram, vertexShader);
-gl.attachShader(shaderProgram, fragmentShader);
-gl.linkProgram(shaderProgram);
-if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert(gl.getProgramInfoLog(shaderProgram));
-}
-
+//create shaders
+const vertexShader = createShader(gl, sourceCode.vertexShader, gl.VERTEX_SHADER);
+const fragmentShader = createShader(gl, sourceCode.fragmentShader, gl.FRAGMENT_SHADER);
+//create program
+const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
+gl.useProgram(shaderProgram);
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
+gl.enableVertexAttribArray(vertexPositionAttributeLoc);
 
 //input assembler
+const geoBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
+const cpuBuffer = new Float32Array(vertices);
+gl.bufferData(gl.ARRAY_BUFFER, cpuBuffer, gl.STATIC_DRAW);
 //vertex shader
 //fragment shader
-gl.useProgram(shaderProgram);
-gl.enableVertexAttribArray(vertexPositionAttributeLoc);
 //rasterizer 
 gl.viewport(0, 0, canvas.width, canvas.height);
 gl.vertexAttribPointer(vertexPositionAttributeLoc, 
@@ -72,8 +88,9 @@ gl.vertexAttribPointer(vertexPositionAttributeLoc,
                        2 * Float32Array.BYTES_PER_ELEMENT, 
                        0);
 
-//primitive assembly
-gl.drawArrays(gl.TRIANGLES, 0, 3);
-//output merger
+
+gl.drawArrays(gl.TRIANGLES, 0, 6);
+//gl.drawArrays(gl.TRIANGLES, 3, 3);
+
 
 
