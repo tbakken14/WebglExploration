@@ -35,7 +35,13 @@ function getSourceCode() {
     precision highp float;
     in vec2 pos;
     uniform vec2 u_res;
+    uniform mat3 u_translate;
+    uniform mat3 u_rotate;
+    uniform mat3 u_scale;
     void main() {
+        vec2 pos = (u_rotate * vec3(pos, 1)).xy;
+        pos = (u_translate * vec3(pos, 1)).xy;
+        pos = (u_scale * vec3(pos, 1)).xy;
         vec2 zeroToOne = pos / u_res;
         vec2 zeroToTwo = zeroToOne * 2.0;
         vec2 clipSpace = zeroToTwo - 1.0;
@@ -64,13 +70,33 @@ function createRectangle(gl, x1, y1, x2, y2) {
         x2, y2,
         x2, y2, 
         x2, y1, 
-        x1, y1 ]), gl.STATIC_DRAW)
+        x1, y1 ]), gl.STATIC_DRAW);
 }
 
-function paintCanvas() {
-    gl.clearColor(.08, .08, .08, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+function translate(x, y) {
+    return [
+        1, 0, 0,
+        0, 1, 0,
+        x, y, 1
+    ];
+}
+
+function rotate(radians) {
+    const c = Math.cos(radians);
+    const s = Math.sin(radians);
+    return [
+        c, -s, 0,
+        s, c, 0,
+        0, 0, 1
+    ];
+}
+
+function scale(mx, my) {
+    return [
+        mx, 0, 0,
+        0, my, 0,
+        0, 0, 1
+    ];
 }
 
 const canvas = document.getElementById("demo");
@@ -104,6 +130,14 @@ const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
 
+const translateLocation = gl.getUniformLocation(shaderProgram, "u_translate");
+const rotateLocation = gl.getUniformLocation(shaderProgram, "u_rotate");
+const scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
+gl.uniformMatrix3fv(translateLocation, false, translate(50, 50));
+gl.uniformMatrix3fv(rotateLocation, false, rotate(-.5));
+gl.uniformMatrix3fv(scaleLocation, false, scale(2, 2));
+
+
 gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
 /**
 const shaderVertexInputBuffer = new Float32Array(vertices);
@@ -121,14 +155,17 @@ gl.vertexAttribPointer(vertexPositionAttributeLoc,
 
 gl.clearColor(.08, .08, .08, 1);
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-for (i = 0; i < 5; i++){ 
-    createRectangle(gl, randomInt(501), randomInt(501), randomInt(501), randomInt(501));
-    const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
-    gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+function drawRectangles(num) {
+    for (i = 0; i < num; i++){ 
+        createRectangle(gl, randomInt(501), randomInt(501), randomInt(501), randomInt(501));
+        const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+        gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
 }
 
-
-
-
-
+createRectangle(gl, 0, 0, 100, 100);
+const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+gl.uniform4f(colorLocation, .5, .5, .5, 1);
+gl.drawArrays(gl.TRIANGLES, 0, 6);
