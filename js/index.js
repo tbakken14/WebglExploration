@@ -153,9 +153,6 @@ gl.vertexAttribPointer(vertexPositionAttributeLoc,
                        2 * Float32Array.BYTES_PER_ELEMENT, 
                        0);
 
-gl.clearColor(.08, .08, .08, 1);
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
 function drawRectangles(num) {
     for (i = 0; i < num; i++){ 
         createRectangle(gl, randomInt(501), randomInt(501), randomInt(501), randomInt(501));
@@ -167,5 +164,19 @@ function drawRectangles(num) {
 
 createRectangle(gl, 0, 0, 100, 100);
 const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
-gl.uniform4f(colorLocation, .5, .5, .5, 1);
-gl.drawArrays(gl.TRIANGLES, 0, 6);
+gl.uniform4f(colorLocation, .5, .8, .5, 1);
+
+const rotationSpeed = .5/60;
+let rotation = 0;
+function drawScene() {
+    rotation += rotationSpeed;
+    gl.uniformMatrix3fv(rotateLocation, false, rotate(rotation));
+
+    gl.clearColor(.08, .08, .08, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    requestAnimationFrame(drawScene);
+}
+
+drawScene();
