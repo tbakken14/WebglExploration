@@ -139,38 +139,90 @@ gl.vertexAttribPointer(vertexPositionAttributeLoc,
                        0);
 
 
-const resolution = 30;
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Shapes.Circle(20, resolution)), gl.STATIC_DRAW);
+function drawShape(rotation, rotationSpeed, 
+                   translation, translationXSpeed, translationYSpeed,
+                   scalation, scalationXSpeed, scalationYSpeed,
+                   offset, stride, 
+                   color) {
 
+    gl.uniformMatrix3fv(rotateLocation, false, rotate(rotation));
+    gl.uniformMatrix3fv(translateLocation, false, translate(...translation));
+    gl.uniformMatrix3fv(scaleLocation, false, scale(...scalation));
+    gl.uniform4f(colorLocation, ...color);
+
+    gl.enable(gl.CULL_FACE);
+
+    gl.drawArrays(gl.TRIANGLES, offset, stride);
+
+    translation[0] += translationXSpeed;
+    translation[1] += translationYSpeed;
+    rotation += rotationSpeed;
+    scalation[0] += scalationXSpeed;
+    scalation[1] += scalationYSpeed;
+}
 /*
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Shapes.Rectangle(10, 10)), gl.STATIC_DRAW);
 */
+
+const resolution1 = 30;
+const resolution2 = 8;
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(Shapes.Circle(20, resolution1).concat(Shapes.Circle(20, resolution2))), gl.STATIC_DRAW);
+
+
 const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+/*
 gl.uniform4f(colorLocation, .5, .2, .5, 1);
+*/
+let translation1XSpeed = .7;
+let translation1YSpeed = -1.5;
+const translation1 = [150, 100];
+let rotation1Speed = .5/100;
+let rotation1 = 0;
+let scalation1 = [5, 1];
+const color1 = [.4, .7, .3, 1];
 
-const rotationSpeed = 3/100;
-let translationXSpeed = 2;
-let translationYSpeed = -1.5;
-const translation = [250, 350];
-let rotation = 0;
+let translation2XSpeed = .5;
+let translation2YSpeed = -1.5;
+const translation2 = [250, 350];
+let rotation2Speed = .2/100;
+let rotation2 = 0;
+let scalation2 = [1, 2];
+const color2 = [.4, .2, .5, 1];
+
 function drawScene() {
-    rotation += rotationSpeed;
-    gl.uniformMatrix3fv(rotateLocation, false, rotate(rotation));
-    translation[0] += translationXSpeed;
-    translation[1] += translationYSpeed;
-    if (translation[1] <= 0 || translation[1] >= canvas.height) {
-        translationYSpeed *= -1;
-    }
-    if (translation[0] <= 0 || translation[0] >= canvas.width) {
-        translationXSpeed *= -1;
-    }
-    gl.uniformMatrix3fv(translateLocation, false, translate(...translation));
-    gl.enable(gl.CULL_FACE);
-
     gl.clearColor(.08, .08, .08, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.drawArrays(gl.TRIANGLES, 0, (resolution - 2) * 3);
+    rotation1 += rotation1Speed;
+    rotation2 += rotation2Speed;
+    drawShape(rotation1, rotation1Speed, 
+              translation1, translation1XSpeed, translation1YSpeed,
+              scalation1, 0, 0,
+              0, (resolution1 - 2) * 3, 
+              color1);
+    if (translation1[1] <= 0 || translation1[1] >= canvas.height) {
+        translation1YSpeed *= -1;
+        rotation1Speed *= -1;
+    }
+    if (translation1[0] <= 0 || translation1[0] >= canvas.width) {
+        translation1XSpeed *= -1;
+        rotation1Speed *= -1;
+    }
+    
+    drawShape(rotation2, rotation2Speed, 
+        translation2, translation2XSpeed, translation2YSpeed,
+        scalation2, 0, 0,
+        (resolution1 - 2) * 3, (resolution2 - 2) * 3,
+        color2);
+    if (translation2[1] <= 0 || translation2[1] >= canvas.height) {
+        translation2YSpeed *= -1;
+        rotation2Speed *= -1;
+    }
+    if (translation2[0] <= 0 || translation2[0] >= canvas.width) {
+        translation2XSpeed *= -1;
+        rotation2Speed *= -1;
+    }
+    
     requestAnimationFrame(drawScene);
 }
 
