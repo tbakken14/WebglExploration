@@ -9,5 +9,5 @@ body {
 #demo {
     background-color: blue;
     text-align: center;
-    margin: calc(50vw - 150px);
+    margin: 0 calc(50vw - 500px);
 }
