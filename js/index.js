@@ -2,6 +2,7 @@ import Shape from "./shape.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
 
+//Create shader
 function createShader(gl, sourceCode, type) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, sourceCode);
@@ -13,6 +14,7 @@ function createShader(gl, sourceCode, type) {
     return shader;
 }
 
+//Create program of vertex and fragment shader
 function createShaderProgram(gl, vertexShader, fragmentShader) {
     const shaderProgram = gl.createProgram();
     gl.attachShader(shaderProgram, vertexShader);
@@ -25,6 +27,7 @@ function createShaderProgram(gl, vertexShader, fragmentShader) {
     return shaderProgram;
 }
 
+//Get the canvas context
 function getContext(canvas) {
     const gl = canvas.getContext("webgl2");
     if (!gl) {
@@ -33,6 +36,7 @@ function getContext(canvas) {
     return gl;
 }
 
+//Get source code for shader files
 function getSourceCode() {
     let sourceCode = {};
     sourceCode.vertexShader = `#version 300 es
@@ -58,6 +62,7 @@ function getSourceCode() {
     return sourceCode;
 }
 
+//Paint Shape to Canvas
 function drawShape(model, offset, stride) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
                                                                 model.rotation,
@@ -68,6 +73,7 @@ function drawShape(model, offset, stride) {
     gl.drawArrays(gl.TRIANGLES, offset, stride);
 }
 
+//Animation Loop
 function drawScene(models) {
     gl.clearColor(.08, .08, .08, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -129,4 +135,6 @@ gl.bufferData(gl.ARRAY_BUFFER,
               gl.STATIC_DRAW);
 const transformationLocation = gl.getUniformLocation(shaderProgram, "u_transform");
 const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+
+//Start loop
 requestAnimationFrame(() => drawScene(models));
