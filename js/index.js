@@ -2,6 +2,21 @@ import Shape from "./shape.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
 
+//Create geometry models
+let model1 = new Model(Shape.Circle(30, 20), [.8, .8, .3, .1], 
+                                      0, [150, 100], [5, 2], 
+                                      .0, [.2, .3], [0, 0]);
+let model2 = new Model(Shape.Circle(20, 8), [.4, .2, .5, 1], 
+                                      0, [250, 350], [1, 2], 
+                                      0, [.5, -.4], [0, 0]);
+/*
+let model3 = new Model(Shape.Rectangle(10, 10), [.2, .9, .2, 1], 
+                                      0, [200, 200], [3, 25],
+                                      -.03, [.1, .5], [0, 0]);
+                                      */
+const models = [model1, model2/*, model3*/];
+
+
 //Create shader
 function createShader(gl, sourceCode, type) {
     const shader = gl.createShader(type);
@@ -42,9 +57,12 @@ function getSourceCode() {
     sourceCode.vertexShader = `#version 300 es
     precision highp float;
     in vec2 pos;
+    in vec3 vertexColor;
+    out vec3 fragmentColor;
     uniform vec2 u_res;
     uniform mat3 u_transform;
     void main() {
+        fragmentColor = vertexColor;
         vec2 pos = (u_transform * vec3(pos, 1)).xy;
         vec2 zeroToOne = pos / u_res;
         vec2 zeroToTwo = zeroToOne * 2.0;
@@ -54,23 +72,24 @@ function getSourceCode() {
 
     sourceCode.fragmentShader = `#version 300 es
     precision highp float;
+    in vec3 fragmentColor;
     uniform vec4 u_color;
     out vec4 outputColor;
     void main() {
-        outputColor = u_color;
+        outputColor = vec4(fragmentColor, 0);
     }`;
     return sourceCode;
 }
 
 //Paint Shape to Canvas
-function drawShape(model, offset, stride) {
+function drawShape(model, first, count) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
                                                                 model.rotation,
                                                                 ...model.scalation);
     gl.uniformMatrix3fv(transformationLocation, false, transformationMatrix);
     gl.uniform4f(colorLocation, ...model.color);
 
-    gl.drawArrays(gl.TRIANGLES, offset, stride);
+    gl.drawArrays(gl.TRIANGLES, first, count);
 }
 
 //Animation Loop
@@ -79,15 +98,23 @@ function drawScene(models) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.CULL_FACE);
 
-    let offset = 0;
+    let first = 0;
     models.forEach((model) => {
-        const stride = model.numVertices();
-        drawShape(model, offset, stride);
-        model.update(100, 400, 100, 400);
-        offset += stride;
+        const count = model.numVertices();
+        drawShape(model, first, count);
+        model.update(100, 900, 100, 900);
+        first += count;
     });
 
     requestAnimationFrame(() => drawScene(models));
+}
+
+function createStaticDrawBuffer(gl, data) {
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return buffer;
 }
 
 const canvas = document.getElementById("demo");
@@ -105,36 +132,122 @@ const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
 gl.useProgram(shaderProgram);
 
 //input assembler
+//Create data buffers
+const vertexData = new Float32Array(model1.vertices.concat(model2.vertices)/*.concat(model3.vertices)*/);
+const colorData = new Uint8Array([200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  200, 80, 100,
+                                  100, 160, 70,
+                                  95, 212, 84,
+                                  200, 80, 100,
+                                  95, 212, 84,
+                                  100, 160, 70,
+                                  ]);
+const geometryBuffer = createStaticDrawBuffer(gl, vertexData);
+const rgbTriangleBuffer = createStaticDrawBuffer(gl, colorData);
+
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
-gl.enableVertexAttribArray(vertexPositionAttributeLoc);
+gl.bindBuffer(gl.ARRAY_BUFFER, geometryBuffer);
+gl.vertexAttribPointer(vertexPositionAttributeLoc, 
+    2, 
+    gl.FLOAT, 
+    false, 
+    2 * Float32Array.BYTES_PER_ELEMENT, 
+    0);
+
+const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');
+gl.bindBuffer(gl.ARRAY_BUFFER, rgbTriangleBuffer);
+gl.vertexAttribPointer(vertexColorAttributeLoc, 
+3, 
+gl.UNSIGNED_BYTE, 
+true, 
+0, 
+0);
+
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-
-const geoBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, geoBuffer);
 
 //rasterizer 
 gl.viewport(0, 0, canvas.width, canvas.height);
 
-gl.vertexAttribPointer(vertexPositionAttributeLoc, 
-                       2, 
-                       gl.FLOAT, 
-                       false, 
-                       2 * Float32Array.BYTES_PER_ELEMENT, 
-                       0);
 
-let model1 = new Model(Shape.Circle(30, 20), [.8, .8, .3, .1], 
-                                      0, [150, 100], [5, 2], 
-                                      .01, [.2, .3], [0, 0]);
-let model2 = new Model(Shape.Circle(20, 8), [.4, .2, .5, 1], 
-                                      0, [250, 350], [1, 2], 
-                                      0, [.5, -.4], [0, 0]);
-const models = [model1, model2];
-gl.bufferData(gl.ARRAY_BUFFER, 
-              new Float32Array(model1.vertices.concat(model2.vertices)), 
-              gl.STATIC_DRAW);
 const transformationLocation = gl.getUniformLocation(shaderProgram, "u_transform");
 const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
+gl.uniform4f(colorLocation, ...[0, 0, 0, 0]);
+
+gl.enableVertexAttribArray(vertexPositionAttributeLoc);
+gl.enableVertexAttribArray(vertexColorAttributeLoc);
+
 
 //Start loop
 requestAnimationFrame(() => drawScene(models));
