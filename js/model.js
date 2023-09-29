@@ -1,8 +1,8 @@
 class Model {
-    constructor(vertices, color, rotation, translation, scalation, 
+    constructor(vertices, colors, rotation, translation, scalation, 
                 rotationVelocity, translationVelocity, scalationVelocity ) {
-        this.vertices = vertices;                       //pixels, number array length (numVertices * 2)
-        this.color = color;                             //frac rgba, number arr length 4
+        this.vertices = vertices;                       //pixels, array length numVertices * 2
+        this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number
         this.translation = translation;                 //pixels, number arr length 2
         this.scalation = scalation;                     //unitless, number arr length 2
