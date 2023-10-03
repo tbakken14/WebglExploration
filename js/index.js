@@ -60,7 +60,6 @@ function getSourceCode() {
     sourceCode.fragmentShader = `#version 300 es
     precision highp float;
     in vec3 fragmentColor;
-    uniform vec4 u_color;
     out vec4 outputColor;
     void main() {
         outputColor = vec4(fragmentColor, 1);
@@ -94,14 +93,6 @@ function drawScene(vaos, models) {
     })
 
     requestAnimationFrame(() => drawScene(vaos, models));
-}
-
-function createStaticDrawBuffer(gl, data) {
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-    return buffer;
 }
 
 const canvas = document.getElementById("demo");

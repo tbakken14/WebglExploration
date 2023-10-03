@@ -4,12 +4,12 @@ class VertexArrayObject {
         this.vao = gl.createVertexArray();
     }
 
-    bindBuffer(data, index, size) {
+    bindBuffer(data, location, size) {
         const buffer = this.createStaticDrawBuffer(data);
         this.gl.bindVertexArray(this.vao);
         this.gl.enableVertexAttribArray(location);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.vertexAttribPointer(index, size, this.gl.FLOAT, false, 0, 0);
+        this.gl.vertexAttribPointer(location, size, this.gl.FLOAT, false, 0, 0);
         this.gl.bindVertexArray(null);
     }
 

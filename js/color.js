@@ -1,12 +1,12 @@
 class Color {
-    static rgb = [1, 0, 0,
-                  0, 1, 0,
-                  0, 0, 1];
+    static rgb = [1, .5, 0,
+                  0, .5, 0,
+                  .5, .5, 1];
 
     static buildColors(numTriangles) {
         let colors = [];
         for (let i = 0; i < numTriangles; i++) {
-            colors.concat(Color.rgb);
+            colors = colors.concat(Color.rgb);
         }
         return colors;
     }
