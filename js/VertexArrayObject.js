@@ -10,6 +10,7 @@ class VertexArrayObject {
         this.gl.enableVertexAttribArray(location);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
         this.gl.vertexAttribPointer(location, size, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
         this.gl.bindVertexArray(null);
     }
 

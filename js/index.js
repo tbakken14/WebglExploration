@@ -38,6 +38,7 @@ function getContext(canvas) {
     return gl;
 }
 
+// 
 //Get source code for shader files
 function getSourceCode() {
     let sourceCode = {};
@@ -73,7 +74,6 @@ function drawShape(vao, model, first, count) {
                                                                 model.rotation,
                                                                 ...model.scalation);
     gl.uniformMatrix3fv(transformationLocation, false, transformationMatrix);
-    //gl.uniform4f(colorLocation, ...model.color);
     gl.bindVertexArray(vao.vao);
     gl.drawArrays(gl.TRIANGLES, first, count);
 }
@@ -84,12 +84,10 @@ function drawScene(vaos, models) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.CULL_FACE);
 
-    //let first = 0;
     vaos.forEach((vao, i) => {
         const model = models[i];
         drawShape(vao, model, 0, model.numVertices());
         model.update(100, 900, 100, 900);
-        //first += count;
     })
 
     requestAnimationFrame(() => drawScene(vaos, models));
@@ -112,11 +110,11 @@ gl.useProgram(shaderProgram);
 //input assembler
 //Create geometry models
 let model1 = new Model(Shape.Circle(30, 20), 
-                        Color.buildColors(20), 
+                        Color.buildColors(20, Color.solidColor(.2, .5, .6)), 
                         0, [150, 100], [5, 2], 
                         0, [.2, .3], [0, 0]);
 let model2 = new Model(Shape.Circle(20, 8), 
-                        Color.buildColors(8), 
+                        Color.buildColors(8, Color.rgb), 
                         0, [250, 350], [1, 2], 
                         0, [.5, -.4], [0, 0]);
 
