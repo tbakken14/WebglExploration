@@ -1,21 +1,8 @@
 import Shape from "./shape.js";
+import Color from "./color.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
-
-//Create geometry models
-let model1 = new Model(Shape.Circle(30, 20), [.8, .8, .3, .1], 
-                                      0, [150, 100], [5, 2], 
-                                      .0, [.2, .3], [0, 0]);
-let model2 = new Model(Shape.Circle(20, 8), [.4, .2, .5, 1], 
-                                      0, [250, 350], [1, 2], 
-                                      0, [.5, -.4], [0, 0]);
-/*
-let model3 = new Model(Shape.Rectangle(10, 10), [.2, .9, .2, 1], 
-                                      0, [200, 200], [3, 25],
-                                      -.03, [.1, .5], [0, 0]);
-                                      */
-const models = [model1, model2/*, model3*/];
-
+import VertexArrayObject from "./vertexArrayObject.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
@@ -82,31 +69,31 @@ function getSourceCode() {
 }
 
 //Paint Shape to Canvas
-function drawShape(model, first, count) {
+function drawShape(vao, model, first, count) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
                                                                 model.rotation,
                                                                 ...model.scalation);
     gl.uniformMatrix3fv(transformationLocation, false, transformationMatrix);
-    gl.uniform4f(colorLocation, ...model.color);
-
+    //gl.uniform4f(colorLocation, ...model.color);
+    gl.bindVertexArray(vao.vao);
     gl.drawArrays(gl.TRIANGLES, first, count);
 }
 
 //Animation Loop
-function drawScene(models) {
+function drawScene(vaos, models) {
     gl.clearColor(.08, .08, .08, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.CULL_FACE);
 
-    let first = 0;
-    models.forEach((model) => {
-        const count = model.numVertices();
-        drawShape(model, first, count);
+    //let first = 0;
+    vaos.forEach((vao, i) => {
+        const model = models[i];
+        drawShape(vao, model, 0, model.numVertices());
         model.update(100, 900, 100, 900);
-        first += count;
-    });
+        //first += count;
+    })
 
-    requestAnimationFrame(() => drawScene(models));
+    requestAnimationFrame(() => drawScene(vaos, models));
 }
 
 function createStaticDrawBuffer(gl, data) {
@@ -132,35 +119,27 @@ const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
 gl.useProgram(shaderProgram);
 
 //input assembler
-//Create data buffers
-const vertexData = new Float32Array(model1.vertices.concat(model2.vertices)/*.concat(model3.vertices)*/);
-const colorData = new Float32Array([.8, .4, .6,
-                                    .8, .4, .6,
-                                    .8, .4, .6,
-                                    .8, .4, .6,
-                                    .8, .4, .6,
-                                    .8, .4, .6,
-                                  ]);
-const geometryBuffer = createStaticDrawBuffer(gl, vertexData);
-const rgbTriangleBuffer = createStaticDrawBuffer(gl, colorData);
+//Create geometry models
+let model1 = new Model(Shape.Circle(30, 20), 
+                        Color.buildColors(20), 
+                        0, [150, 100], [5, 2], 
+                        0, [.2, .3], [0, 0]);
+let model2 = new Model(Shape.Circle(20, 8), 
+                        Color.buildColors(8), 
+                        0, [250, 350], [1, 2], 
+                        0, [.5, -.4], [0, 0]);
+
+const models = [model1, model2];
 
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
-gl.bindBuffer(gl.ARRAY_BUFFER, geometryBuffer);
-gl.vertexAttribPointer(vertexPositionAttributeLoc, 
-    2, 
-    gl.FLOAT, 
-    false, 
-    2 * Float32Array.BYTES_PER_ELEMENT, 
-    0);
-
 const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');
-gl.bindBuffer(gl.ARRAY_BUFFER, rgbTriangleBuffer);
-gl.vertexAttribPointer(vertexColorAttributeLoc, 
-3, 
-gl.FLOAT, 
-false, 
-0, 
-0);
+const vaos = [];
+models.forEach((model) => {
+        const vao = new VertexArrayObject(gl);
+        vao.bindBuffer(new Float32Array(model.vertices), vertexPositionAttributeLoc, 2);
+        vao.bindBuffer(new Float32Array(model.colors), vertexColorAttributeLoc, 3);
+        vaos.push(vao);
+    });
 
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
@@ -178,4 +157,4 @@ gl.enableVertexAttribArray(vertexColorAttributeLoc);
 
 
 //Start loop
-requestAnimationFrame(() => drawScene(models));
+requestAnimationFrame(() => drawScene(vaos, models));

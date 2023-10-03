@@ -1,15 +1,24 @@
 class VertexArrayObject {
-    constructor(gl) {
+    constructor(gl, model) {
         this.gl = gl;
-        this.vao = gl.createVertexArrayObject();
+        this.vao = gl.createVertexArray();
     }
 
-    bindBuffer(buffer, index, size) {
-        gl.bindVertexArray(this.vao);
-        gl.enableVertexAttribArray(location);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPoint(index, size, gl.FLOAT, false, 0, 0);
-        gl.bindVertexArray(null);
+    bindBuffer(data, index, size) {
+        const buffer = this.createStaticDrawBuffer(data);
+        this.gl.bindVertexArray(this.vao);
+        this.gl.enableVertexAttribArray(location);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.vertexAttribPointer(index, size, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindVertexArray(null);
+    }
+
+    createStaticDrawBuffer(data) {
+        const buffer = this.gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        return buffer;
     }
 }
 
