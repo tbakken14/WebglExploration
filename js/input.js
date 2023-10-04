@@ -24,7 +24,6 @@ class Input {
                     playerModel.rotationVelocity = -.03;
                     break;
                 case " " :
-                    console.log("hi")
                     Input.fireProjectile(projectileModel, playerModel, models);
                     break;
                 default:
@@ -36,11 +35,11 @@ class Input {
             if (event.repeat) { return }
             switch (event.key) {
                 case "ArrowLeft" :
-                case "A":
+                case "a":
                     playerModel.rotationVelocity = 0;
                     break;
                 case "ArrowRight" :
-                case "D":
+                case "d":
                     playerModel.rotationVelocity = 0;
                     break;
                 default:

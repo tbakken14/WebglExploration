@@ -70,28 +70,27 @@ function getSourceCode() {
 }
 
 //Paint Shape to Canvas
-function drawShape(vao, model, first, count) {
+function drawShape(model, first, count) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
                                                                 model.rotation,
                                                                 ...model.scalation);
     gl.uniformMatrix3fv(transformationLocation, false, transformationMatrix);
-    gl.bindVertexArray(vao.vao);
+    gl.bindVertexArray(model.vao);
     gl.drawArrays(gl.TRIANGLES, first, count);
 }
 
 //Animation Loop
-function drawScene(vaos, models) {
+function drawScene(models) {
     gl.clearColor(.08, .08, .08, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.CULL_FACE);
 
-    vaos.forEach((vao, i) => {
-        const model = models[i];
-        drawShape(vao, model, 0, model.numVertices());
+    models.forEach((model) => {
+        drawShape(model, 0, model.numVertices());
         model.update(100, 900, 100, 900);
     })
 
-    requestAnimationFrame(() => drawScene(vaos, models));
+    requestAnimationFrame(() => drawScene(models));
 }
 
 const canvas = document.getElementById("demo");
@@ -125,17 +124,17 @@ let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [1
                         0, [0, 0], [0, 0]);
 const models = [model1, model2, model3];
 
-Input.addKeyboardInputListeners(document, model3, model2, models);
-
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
 const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');
-const vaos = [];
 models.forEach((model) => {
-        const vao = new VertexArrayObject(gl);
-        vao.bindBuffer(new Float32Array(model.vertices), vertexPositionAttributeLoc, 2);
-        vao.bindBuffer(new Float32Array(model.colors), vertexColorAttributeLoc, 3);
-        vaos.push(vao);
-    });
+    const vao = new VertexArrayObject(gl);
+    vao.bindBuffer(new Float32Array(model.vertices), vertexPositionAttributeLoc, 2);
+    vao.bindBuffer(new Float32Array(model.colors), vertexColorAttributeLoc, 3);
+    model.vao = vao.vao;
+});
+
+Input.addKeyboardInputListeners(document, model3, model2, models);
+
 
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
@@ -153,4 +152,4 @@ gl.enableVertexAttribArray(vertexColorAttributeLoc);
 
 
 //Start loop
-requestAnimationFrame(() => drawScene(vaos, models));
+requestAnimationFrame(() => drawScene(models));
