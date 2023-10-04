@@ -119,8 +119,8 @@ let model2 = new Model(Shape.Circle(20, 8),
                         0, [250, 350], [1, 2], 
                         0, [.5, -.4], [0, 0]);
 //[0, 1000], [1000, 1000], [0, 0]
-let model3 = new Model(Shape.Triangle([40, 0], [0, 10], [0, -10]),
-                        Color.buildColors(10 - 2, Color.solidColor(.8, .2, .2)),
+let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
+                        Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
                         0, [0, 0], [0, 0]);
 const models = [model1, model2, model3];
