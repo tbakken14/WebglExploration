@@ -1,6 +1,7 @@
 class Model {
     constructor(vertices, colors, rotation, translation, scalation, 
-                rotationVelocity, translationVelocity, scalationVelocity ) {
+                rotationVelocity, translationVelocity, scalationVelocity,
+                vao) {
         this.vertices = vertices;                       //pixels, array length numVertices * 2
         this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number
@@ -9,6 +10,19 @@ class Model {
         this.rotationVelocity = rotationVelocity;       //per update, number
         this.translationVelocity = translationVelocity; //per update, number arr length 2
         this.scalationVelocity = scalationVelocity;     //per update, number arr length 2
+        this.vao = vao;
+    }
+
+    constructor(model) {
+        this.vertices = model.vertices;                       //pixels, array length numVertices * 2
+        this.colors = model.colors;                           //rgb, array length numVertices * 3
+        this.rotation = model.rotation;                       //radians, number
+        this.translation = model.translation;                 //pixels, number arr length 2
+        this.scalation = model.scalation;                     //unitless, number arr length 2
+        this.rotationVelocity = model.rotationVelocity;       //per update, number
+        this.translationVelocity = model.translationVelocity; //per update, number arr length 2
+        this.scalationVelocity = model.scalationVelocity;     //per update, number arr length 2
+        this.vao = model.vao;
     }
 
     numVertices() {
