@@ -1,5 +1,7 @@
-class Movement {
-    static addPlayerMovement(document, playerModel) {
+import Model from "./model.js";
+
+class Input {
+    static addKeyboardInputListeners(document, playerModel, projectileModel, models) {
         document.addEventListener("keydown", (event) => {
             if (event.repeat) { return }
             switch (event.key) {
@@ -20,6 +22,10 @@ class Movement {
                 case "ArrowRight" :
                 case "d":
                     playerModel.rotationVelocity = -.03;
+                    break;
+                case " " :
+                    console.log("hi")
+                    Input.fireProjectile(projectileModel, playerModel, models);
                     break;
                 default:
                     break;
@@ -42,6 +48,20 @@ class Movement {
             }
         });
     }
+
+    static fireProjectile(projectile, player, models) {
+        const speed = 2;
+        const spawnedProjectile = new Model([...projectile.vertices], [...projectile.colors],
+                player.rotation, [...player.translation], [...projectile.scalation],
+                projectile.rotationVelocity, 
+                [speed * Math.cos(player.rotation), speed * Math.sin(player.rotation)], 
+                [...projectile.scalationVelocity],
+                projectile.vao);
+        spawnedProjectile.translationVelocity = [speed*Math.cos(player.rotation),
+                                                 speed*Math.sin(player.rotation)];
+        spawnedProjectile.translationVelocity.map((e, i) => e + player.translationVelocity[i]);
+        models.push(spawnedProjectile);
+    }
 }
 
-export default Movement;
+export default Input;

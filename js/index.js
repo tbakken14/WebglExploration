@@ -3,7 +3,7 @@ import Color from "./color.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
 import VertexArrayObject from "./vertexArrayObject.js";
-import Movement from "./movement.js";
+import Input from "./input.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
@@ -125,7 +125,7 @@ let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [1
                         0, [0, 0], [0, 0]);
 const models = [model1, model2, model3];
 
-Movement.addPlayerMovement(document, model3);
+Input.addKeyboardInputListeners(document, model3, model2, models);
 
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
 const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');
