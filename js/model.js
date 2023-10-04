@@ -19,11 +19,21 @@ class Model {
         this.rotation += this.rotationVelocity;
         this.translation = this.translation.map((e, i) => e + this.translationVelocity[i]);
         this.scalation = this.scalation.map((e, i) => e + this.scalationVelocity[i]);
-        if (this.translation[0] <= left || this.translation[0] >= right) {
-            this.translationVelocity[0] *= -.8;
+        if (this.translation[0] <= left) {
+            this.translationVelocity[0] *= -0.8;
+            this.translation[0] = left;
         }
-        if (this.translation[1] <= bottom || this.translation[1] >= top) {
-            this.translationVelocity[1] *= -.8;
+        else if (this.translation[0] >= right) {
+            this.translationVelocity[0] *= -0.8;
+            this.translation[0] = right;
+        }
+        if (this.translation[1] <= bottom) {
+            this.translationVelocity[1] *= -0.8;
+            this.translation[1] = bottom;
+        }
+        else if (this.translation[1] >= top) {
+            this.translationVelocity[1] *= -0.8;
+            this.translation[1] = top;
         }
     }
 }
