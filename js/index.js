@@ -3,6 +3,7 @@ import Color from "./color.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
 import VertexArrayObject from "./vertexArrayObject.js";
+import Movement from "./movement.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
@@ -110,15 +111,21 @@ gl.useProgram(shaderProgram);
 //input assembler
 //Create geometry models
 let model1 = new Model(Shape.Circle(30, 20), 
-                        Color.buildColors(20, Color.solidColor(.2, .5, .6)), 
+                        Color.buildColors(20 - 2, Color.solidColor(.2, .5, .6)), 
                         0, [150, 100], [5, 2], 
                         0, [.2, .3], [0, 0]);
 let model2 = new Model(Shape.Circle(20, 8), 
-                        Color.buildColors(8, Color.rgb), 
+                        Color.buildColors(8 - 2, Color.rgb), 
                         0, [250, 350], [1, 2], 
                         0, [.5, -.4], [0, 0]);
+//[0, 1000], [1000, 1000], [0, 0]
+let model3 = new Model(Shape.Triangle([40, 0], [0, 10], [0, -10]),
+                        Color.buildColors(10 - 2, Color.solidColor(.8, .2, .2)),
+                        0, [400, 400], [1, 1], 
+                        0, [0, 0], [0, 0]);
+const models = [model1, model2, model3];
 
-const models = [model1, model2];
+Movement.addPlayerMovement(document, model3);
 
 const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
 const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');

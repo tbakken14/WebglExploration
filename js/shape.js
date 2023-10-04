@@ -1,4 +1,5 @@
 class Shape {
+    //vertices need to be counter-clockwise to not be culled. 
     static Triangle(vertex1, vertex2, vertex3) {
         return [
             ...vertex1,

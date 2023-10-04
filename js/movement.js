@@ -1,29 +1,25 @@
 class Movement {
-    constructor(window, playerModel) {
-        this.window = window;
-        this.playerModel = playerModel;
-    }
-
-    addKeyboardEvents() {
-        this.window.document = addEventListener("keydown", (event) => {
+    static addPlayerMovement(document, playerModel) {
+        document.addEventListener("keydown", (event) => {
+            if (event.repeat) { return }
             switch (event.key) {
                 case "ArrowUp" :
                 case "W":
-                    this.playerModel.translationVelocity[0] += Math.cos(this.playerModel.rotation);
-                    this.playerModel.translationVelocity[1] += Math.sin(this.playerModel.rotation);
+                    playerModel.translationVelocity[0] += Math.cos(playerModel.rotation);
+                    playerModel.translationVelocity[1] += Math.sin(playerModel.rotation);
                     break;
                 case "ArrowDown" :
                 case "S":
-                    this.playerModel.translationVelocity[0] -= Math.cos(this.playerModel.rotation);
-                    this.playerModel.translationVelocity[1] -= Math.sin(this.playerModel.rotation);
+                    playerModel.translationVelocity[0] -= Math.cos(playerModel.rotation);
+                    playerModel.translationVelocity[1] -= Math.sin(playerModel.rotation);
                     break;
                 case "ArrowLeft" :
                 case "A":
-                    this.playerModel.rotationVelocity += .001;
+                    playerModel.rotationVelocity += .001;
                     break;
                 case "ArrowRight" :
                 case "D":
-                    this.playerModel.rotationVelocity -= .001;
+                    playerModel.rotationVelocity -= .001;
                     break;
                 default:
                     break;

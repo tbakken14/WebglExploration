@@ -20,14 +20,10 @@ class Model {
         this.translation = this.translation.map((e, i) => e + this.translationVelocity[i]);
         this.scalation = this.scalation.map((e, i) => e + this.scalationVelocity[i]);
         if (this.translation[0] <= left || this.translation[0] >= right) {
-            this.translationVelocity[0] *= -1;
-            this.rotationVelocity *= -1;
-            this.scalationVelocity[0] *= -1;
+            this.translationVelocity[0] *= -.8;
         }
         if (this.translation[1] <= bottom || this.translation[1] >= top) {
-            this.translationVelocity[1] *= -1;
-            this.rotationVelocity *= -1;
-            this.scalationVelocity[1] *= -1;
+            this.translationVelocity[1] *= -.8;
         }
     }
 }

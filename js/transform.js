@@ -11,8 +11,8 @@ class Transform {
         const cos = Math.cos(radians);
         const sin = Math.sin(radians);
         return [
-            cos, -sin, 0,
-            sin, cos, 0,
+            cos, sin, 0,
+            -sin, cos, 0,
             0, 0, 1
         ];
     }
