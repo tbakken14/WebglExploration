@@ -4,6 +4,7 @@ import Model from "./model.js";
 import Transform from "./transform.js";
 import VertexArrayObject from "./vertexArrayObject.js";
 import Input from "./input.js";
+import Spawn from "./spawn.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
@@ -90,6 +91,8 @@ function drawScene() {
         drawShape(model);
         model.update(100, 900, 100, 900);
     });
+
+    Spawn.spawnHandler();
 
     requestAnimationFrame(() => drawScene());
 }
