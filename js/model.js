@@ -1,4 +1,4 @@
-import VertexArrayObject from "./vertexArrayObject.js";
+import VertexArrayObject from "./vertexarrayobject.js";
 import Game from "./game.js";
 
 class Model {
