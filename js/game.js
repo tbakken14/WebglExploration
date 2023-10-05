@@ -35,6 +35,8 @@ class Game {
     static resetGame() {
         this.isEndGame = false;
         this.score = 0;
+        const scoreElement = document.getElementById("score");
+        scoreElement.innerHTML = "Score: " + this.score;
         Model.reset();
         Spawn.spawnPlayer();
     }
