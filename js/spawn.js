@@ -3,7 +3,7 @@ import Shape from "./shape.js";
 import Color from "./color.js";
 
 class Spawn {
-    static rate = 5000;
+    static rate = 4000;
     static lastSpawnTime = 0;
 
     static spawnHandler() {
@@ -14,7 +14,9 @@ class Spawn {
         }
     }
     static spawnAsteroid() {
-        Spawn.rate -= 100;
+        if (Spawn.rate > 400) {
+            Spawn.rate -= 100;
+        }
         const location = Spawn.#getSpawnLocation();
         const rotationVelocity = (Math.random() * 2 - 1) / 50;
         const scale = (Math.random()) * 2 + 1;

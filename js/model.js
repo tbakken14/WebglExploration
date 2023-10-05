@@ -1,4 +1,5 @@
 import VertexArrayObject from "./vertexArrayObject.js";
+import Game from "./game.js";
 
 class Model {
     static models = {};
@@ -7,7 +8,7 @@ class Model {
 
     constructor(vertices, colors, rotation, translation, scalation, 
                 rotationVelocity, translationVelocity, scalationVelocity,
-                isBound, colliderRadius, isAsteroid, isPlayer) {
+                isBound, colliderRadius, isAsteroid, isPlayer, endGame) {
         this.vertices = vertices;                       //pixels, array length numVertices * 2
         this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number
@@ -19,6 +20,8 @@ class Model {
         this.isBound = isBound;
         this.colliderRadius = colliderRadius;
         this.isAsteroid = isAsteroid;
+        this.isPlayer = isPlayer;
+        this.endGame = endGame;
         this.key = Model.key++;
         Model.models[this.key] = this;
         this.createVao();
@@ -41,19 +44,19 @@ class Model {
             }
         }
         if (this.translation[0] <= left) {
-            this.translationVelocity[0] *= -0.4;
+            this.translationVelocity[0] *= -1;
             this.translation[0] = left;
         }
         else if (this.translation[0] >= right) {
-            this.translationVelocity[0] *= -0.4;
+            this.translationVelocity[0] *= -1;
             this.translation[0] = right;
         }
         if (this.translation[1] <= bottom) {
-            this.translationVelocity[1] *= -0.4;
+            this.translationVelocity[1] *= -1;
             this.translation[1] = bottom;
         }
         else if (this.translation[1] >= top) {
-            this.translationVelocity[1] *= -0.4;
+            this.translationVelocity[1] *= -1;
             this.translation[1] = top;
         }
         if (this.isAsteroid) {
@@ -76,8 +79,15 @@ class Model {
     }
 
     handleCollision(model) {
-        delete Model.models[this.key];
         delete Model.models[model.key];
+        delete Model.models[this.key];
+
+        if (model.isPlayer) {
+            Game.endGame();
+        }
+        else {
+            Game.incrementScore();
+        }
     }
 
     isInBounds(bottom, top, left, right) {

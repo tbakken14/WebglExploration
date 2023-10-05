@@ -5,6 +5,7 @@ import Transform from "./transform.js";
 import VertexArrayObject from "./vertexArrayObject.js";
 import Input from "./input.js";
 import Spawn from "./spawn.js";
+import Game from "./game.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
@@ -70,6 +71,11 @@ function getSourceCode() {
     return sourceCode;
 }
 
+function clearCanvas() {
+    gl.clearColor(.08, .08, .08, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+}
+
 //Paint Shape to Canvas
 function drawShape(model) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
@@ -83,8 +89,7 @@ function drawShape(model) {
 
 //Animation Loop
 function drawScene() {
-    gl.clearColor(.08, .08, .08, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    clearCanvas();
     gl.enable(gl.CULL_FACE);
 
     Object.values(Model.models).forEach ((model) => {
@@ -93,12 +98,12 @@ function drawScene() {
     });
 
     Spawn.spawnHandler();
-
-    requestAnimationFrame(() => drawScene());
-}
-
-function endGame(frame) {
-    cancelAnimationFrame(frame);
+    if (!Game.isEndGame) {
+        requestAnimationFrame(() => drawScene());
+    }
+    else {
+        clearCanvas();
+    }
 }
 
 const canvas = document.getElementById("demo");
@@ -129,7 +134,7 @@ const projectile = new Model(Shape.CirclePie(20, 20),
 const player = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
-                        0, [0, 0], [0, 0], true, 1, false, true);
+                        0, [0, 0], [0, 0], true, 1, false, true, () => endGame());
 
 
 Input.addKeyboardInputListeners(document, player, projectile);
@@ -148,4 +153,4 @@ gl.uniform4f(colorLocation, ...[0, 0, 0, 0]);
 
 
 //Start loop
-requestAnimationFrame(() => drawScene());
+let frame = requestAnimationFrame(() => drawScene());
