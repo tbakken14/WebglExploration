@@ -1,30 +1,30 @@
-import Model from "./model.js";
+import Spawn from "./spawn.js";
 
 class Input {
-    static addKeyboardInputListeners(document, playerModel, projectileModel, models) {
+    static addKeyboardInputListeners() {
         document.addEventListener("keydown", (event) => {
             if (event.repeat) { return }
             switch (event.key) {
                 case "ArrowUp" :
                 case "w":
-                    playerModel.translationVelocity[0] += Math.cos(playerModel.rotation);
-                    playerModel.translationVelocity[1] += Math.sin(playerModel.rotation);
+                    Spawn.player.translationVelocity[0] += Math.cos(Spawn.player.rotation);
+                    Spawn.player.translationVelocity[1] += Math.sin(Spawn.player.rotation);
                     break;
                 case "ArrowDown" :
                 case "s":
-                    playerModel.translationVelocity[0] -= .5*Math.cos(playerModel.rotation);
-                    playerModel.translationVelocity[1] -= .5*Math.sin(playerModel.rotation);
+                    Spawn.player.translationVelocity[0] -= .5*Math.cos(Spawn.player.rotation);
+                    Spawn.player.translationVelocity[1] -= .5*Math.sin(Spawn.player.rotation);
                     break;
                 case "ArrowLeft" :
                 case "a":
-                    playerModel.rotationVelocity = .03;
+                    Spawn.player.rotationVelocity = .03;
                     break;
                 case "ArrowRight" :
                 case "d":
-                    playerModel.rotationVelocity = -.03;
+                    Spawn.player.rotationVelocity = -.03;
                     break;
                 case " " :
-                    Input.fireProjectile(projectileModel, playerModel, models);
+                    Spawn.spawnProjectile();
                     break;
                 default:
                     break;
@@ -36,27 +36,16 @@ class Input {
             switch (event.key) {
                 case "ArrowLeft" :
                 case "a":
-                    playerModel.rotationVelocity = 0;
+                    Spawn.player.rotationVelocity = 0;
                     break;
                 case "ArrowRight" :
                 case "d":
-                    playerModel.rotationVelocity = 0;
+                    Spawn.player.rotationVelocity = 0;
                     break;
                 default:
                     break;
             }
         });
-    }
-
-    static fireProjectile(projectile, player) {
-        const speed = 3;
-        const spawnedProjectile = new Model([...projectile.vertices], [...projectile.colors],
-                player.rotation, [...player.translation], [...projectile.scalation],
-                projectile.rotationVelocity, 
-                [speed * Math.cos(player.rotation), speed * Math.sin(player.rotation)], 
-                [...projectile.scalationVelocity],
-                false, projectile.colliderRadius, projectile.isAsteroid, projectile.isPlayer);
-        spawnedProjectile.translationVelocity = spawnedProjectile.translationVelocity.map((e, i) => e + player.translationVelocity[i]);
     }
 }
 

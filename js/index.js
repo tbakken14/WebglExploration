@@ -106,6 +106,11 @@ function drawScene() {
     }
 }
 
+function startGame() {
+    Game.resetGame();
+    requestAnimationFrame(() => drawScene());
+}
+
 const canvas = document.getElementById("demo");
 canvas.width = 1000;
 canvas.height = 1000;
@@ -122,35 +127,15 @@ const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
 gl.useProgram(shaderProgram);
 
 //input assembler
-//Create geometry models
-const asteroid = new Model(Shape.CirclePie(30, 20), 
-                        Color.buildColors(20, Color.asteroid, true), 
-                        0, [150, 100], [3, 3], 
-                        0, [.2, .3], [0, 0], true, 90, true, false);
-const projectile = new Model(Shape.CirclePie(20, 20), 
-                        Color.buildColors(20, Color.projectile),
-                        0, [0, 0], [.5, .5], 
-                        0, [0, 0], [0, 0], false, 10, false, false); 
-const player = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
-                        Color.buildColors(3, Color.solidColor(.8, .2, .7)),
-                        0, [400, 400], [1, 1], 
-                        0, [0, 0], [0, 0], true, 1, false, true, () => endGame());
 
 
-Input.addKeyboardInputListeners(document, player, projectile);
+Input.addKeyboardInputListeners();
 
-
+const transformationLocation = gl.getUniformLocation(shaderProgram, "u_transform");
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
 //rasterizer 
 gl.viewport(0, 0, canvas.width, canvas.height);
 
-
-const transformationLocation = gl.getUniformLocation(shaderProgram, "u_transform");
-const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
-gl.uniform4f(colorLocation, ...[0, 0, 0, 0]);
-
-
-//Start loop
-let frame = requestAnimationFrame(() => drawScene());
+startGame();

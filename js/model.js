@@ -106,6 +106,12 @@ class Model {
         vao.bindBuffer(new Float32Array(this.colors), 1, 3);
         this.vao = vao.vao;
     }
+
+    static reset() {
+        Model.models = {};
+        Model.nonAsteroidKeys = [];
+        Model.key = 0;
+    }
 }
 
 export default Model;

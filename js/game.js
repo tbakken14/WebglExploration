@@ -1,3 +1,6 @@
+import Model from "./model.js";
+import Spawn from "./spawn.js";
+
 class Game {
     static isEndGame = false;
     static score = 0;
@@ -14,6 +17,8 @@ class Game {
     static resetGame() {
         this.isEndGame = false;
         this.score = 0;
+        Model.reset();
+        Spawn.spawnPlayer();
     }
 }
 
