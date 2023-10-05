@@ -18,12 +18,13 @@ class Spawn {
         if (Spawn.rate > 400) {
             Spawn.rate -= 100;
         }
+        const color = Color.asteroidColors[Math.floor(Math.random() * Color.asteroidColors.length)];
         const location = Spawn.#getSpawnLocation();
         const rotationVelocity = (Math.random() * 2 - 1) / 50;
         const scale = (Math.random()) * 2 + 1;
         const translationVelocity = [2 * (Math.random() * 2 - 1), 2 * (Math.random() * 2 - 1)];
         new Model(Shape.CirclePie(30, 20), 
-                        Color.buildColors(20, Color.asteroid, true), 
+                        Color.buildColors(20, color, true), 
                         0, location, [scale, scale], 
                         rotationVelocity, translationVelocity, [0, 0], true, 30 * scale, true, false);
     }

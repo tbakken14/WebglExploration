@@ -3,9 +3,19 @@ class Color {
                   0, .5, 2,
                   .5, .7, 0 ];
 
-    static asteroid = [.25, .43, .6,
+    static asteroid1 = [.25, .43, .6,
                        .85, .63, 0,
                        .08, .08, .08];
+
+    static asteroid2 = [.8, .43, .2,
+                        .85, .63, 0,
+                        .08, .08, .08];
+    
+    static asteroid3 = [0, 0, 0,
+                        0, 0, 1,
+                        0, 0, 0];
+
+    static asteroidColors = [Color.asteroid1, Color.asteroid2, Color.asteroid3];
 
     static projectile = [0, 0, 0,
                          .192, 1, .192,
