@@ -6,8 +6,20 @@ body {
     margin: 0px;
 }
 
-#demo {
-    background-color: blue;
+#game {
     text-align: center;
     margin: 0 calc(50vw - 500px);
+}
+
+img {
+    width: 800px;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    text-align: center;
+    margin: auto auto 10px auto;
+}
+
+h2 {
+    text-align: center;
 }

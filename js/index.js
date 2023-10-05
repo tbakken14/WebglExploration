@@ -111,7 +111,7 @@ function startGame() {
     requestAnimationFrame(() => drawScene());
 }
 
-const canvas = document.getElementById("demo");
+const canvas = document.getElementById("game");
 canvas.width = 1000;
 canvas.height = 1000;
 const gl = getContext(canvas);
