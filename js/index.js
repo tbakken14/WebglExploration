@@ -109,13 +109,13 @@ gl.useProgram(shaderProgram);
 
 //input assembler
 //Create geometry models
-let model1 = new Model(Shape.Circle(30, 20), 
-                        Color.buildColors(20 - 2, Color.solidColor(.2, .5, .6)), 
+let model1 = new Model(Shape.CirclePie(30, 20), 
+                        Color.buildColors(20, Color.colorX, true), 
                         0, [150, 100], [5, 2], 
                         0, [.2, .3], [0, 0]);
-let model2 = new Model(Shape.Circle(20, 8), 
-                        Color.buildColors(8 - 2, Color.rgb), 
-                        0, [250, 350], [1, 2], 
+let model2 = new Model(Shape.CircleFan(20, 8), 
+                        Color.buildColors(8 - 2, Color.colorX), 
+                        0, [250, 350], [1, 2 ], 
                         0, [.5, -.4], [0, 0]);
 //[0, 1000], [1000, 1000], [0, 0]
 let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
