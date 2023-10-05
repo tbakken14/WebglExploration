@@ -21,7 +21,7 @@ class Shape {
         ];
     }
 
-    static Circle(radius, resolution) {
+    static CircleFan(radius, resolution) {
         resolution = (resolution < 3) ? 3 : resolution;
         const d_radians = 2 * Math.PI / resolution;
         let radians = 3 * d_radians;
@@ -37,6 +37,23 @@ class Shape {
             vertices.push(radius, 0);
             vertices.push(...last_vertex);
             vertices.push(...vertex);
+            radians += d_radians;
+        }
+        return vertices;
+    }
+
+    static CirclePie(radius, resolution) {
+        resolution = (resolution < 3) ? 3 : resolution;
+        const d_radians = 2 * Math.PI / resolution;
+        let radians = d_radians;
+        let vertices = [];
+        let last_vertex = this.#getXY(radius, 0);
+        for (let i = 0; i < resolution; i++) {
+            const vertex = this.#getXY(radius, radians);
+            vertices.push(...vertex);
+            vertices.push(0, 0);
+            vertices.push(...last_vertex);
+            last_vertex = vertex;
             radians += d_radians;
         }
         return vertices;
