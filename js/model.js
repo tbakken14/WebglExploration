@@ -7,7 +7,7 @@ class Model {
 
     constructor(vertices, colors, rotation, translation, scalation, 
                 rotationVelocity, translationVelocity, scalationVelocity,
-                isBound, colliderRadius, isAsteroid) {
+                isBound, colliderRadius, isAsteroid, isPlayer) {
         this.vertices = vertices;                       //pixels, array length numVertices * 2
         this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number

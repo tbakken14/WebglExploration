@@ -55,7 +55,7 @@ class Input {
                 projectile.rotationVelocity, 
                 [speed * Math.cos(player.rotation), speed * Math.sin(player.rotation)], 
                 [...projectile.scalationVelocity],
-                false, projectile.colliderRadius, projectile.isAsteroid);
+                false, projectile.colliderRadius, projectile.isAsteroid, projectile.isPlayer);
         spawnedProjectile.translationVelocity = spawnedProjectile.translationVelocity.map((e, i) => e + player.translationVelocity[i]);
     }
 }

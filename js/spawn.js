@@ -18,11 +18,11 @@ class Spawn {
         const location = Spawn.#getSpawnLocation();
         const rotationVelocity = (Math.random() * 2 - 1) / 50;
         const scale = (Math.random()) * 2 + 1;
-        const translationVelocity = [(Math.random() * 2 - 1), (Math.random() * 2 - 1)];
+        const translationVelocity = [2 * (Math.random() * 2 - 1), 2 * (Math.random() * 2 - 1)];
         const asteroid = new Model(Shape.CirclePie(30, 20), 
                         Color.buildColors(20, Color.asteroid, true), 
                         0, location, [scale, scale], 
-                        rotationVelocity, translationVelocity, [0, 0], true, 30 * scale, true);
+                        rotationVelocity, translationVelocity, [0, 0], true, 30 * scale, true, false);
     }
 
     static #getSpawnLocation() {

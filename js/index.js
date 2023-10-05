@@ -89,12 +89,16 @@ function drawScene() {
 
     Object.values(Model.models).forEach ((model) => {
         drawShape(model);
-        model.update(100, 900, 100, 900);
+        model.update(0, 1000, 0, 1000);
     });
 
     Spawn.spawnHandler();
 
     requestAnimationFrame(() => drawScene());
+}
+
+function endGame(frame) {
+    cancelAnimationFrame(frame);
 }
 
 const canvas = document.getElementById("demo");
@@ -117,15 +121,15 @@ gl.useProgram(shaderProgram);
 const asteroid = new Model(Shape.CirclePie(30, 20), 
                         Color.buildColors(20, Color.asteroid, true), 
                         0, [150, 100], [3, 3], 
-                        0, [.2, .3], [0, 0], true, 90, true);
+                        0, [.2, .3], [0, 0], true, 90, true, false);
 const projectile = new Model(Shape.CirclePie(20, 20), 
                         Color.buildColors(20, Color.projectile),
                         0, [0, 0], [.5, .5], 
-                        0, [0, 0], [0, 0], false, 10, false); 
+                        0, [0, 0], [0, 0], false, 10, false, false); 
 const player = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
-                        0, [0, 0], [0, 0], true, 1, false);
+                        0, [0, 0], [0, 0], true, 1, false, true);
 
 
 Input.addKeyboardInputListeners(document, player, projectile);
