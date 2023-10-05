@@ -111,18 +111,18 @@ gl.useProgram(shaderProgram);
 
 //input assembler
 //Create geometry models
-const asteroid = new Model(Shape.CirclePie(30, 10), 
-                        Color.buildColors(10, Color.asteroid, true), 
-                        0, [150, 100], [5, 2], 
-                        0, [.2, .3], [0, 0], true);
+const asteroid = new Model(Shape.CirclePie(30, 20), 
+                        Color.buildColors(20, Color.asteroid, true), 
+                        0, [150, 100], [3, 3], 
+                        0, [.2, .3], [0, 0], true, 90, true);
 const projectile = new Model(Shape.CirclePie(20, 20), 
-                        Color.buildColors(20, Color.projectile), 
+                        Color.buildColors(20, Color.projectile),
                         0, [0, 0], [.5, .5], 
-                        0, [0, 0], [0, 0], false); 
+                        0, [0, 0], [0, 0], false, 10, false); 
 const player = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
-                        0, [0, 0], [0, 0], true);
+                        0, [0, 0], [0, 0], true, 1, false);
 
 
 Input.addKeyboardInputListeners(document, player, projectile);

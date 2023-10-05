@@ -2,11 +2,12 @@ import VertexArrayObject from "./vertexArrayObject.js";
 
 class Model {
     static models = {};
+    static nonAsteroidKeys = [];
     static key = 0;
 
     constructor(vertices, colors, rotation, translation, scalation, 
                 rotationVelocity, translationVelocity, scalationVelocity,
-                isBound) {
+                isBound, colliderRadius, isAsteroid) {
         this.vertices = vertices;                       //pixels, array length numVertices * 2
         this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number
@@ -16,9 +17,14 @@ class Model {
         this.translationVelocity = translationVelocity; //per update, number arr length 2
         this.scalationVelocity = scalationVelocity;     //per update, number arr length 2
         this.isBound = isBound;
+        this.colliderRadius = colliderRadius;
+        this.isAsteroid = isAsteroid;
         this.key = Model.key++;
         Model.models[this.key] = this;
         this.createVao();
+        if (!this.isAsteroid) {
+            Model.nonAsteroidKeys.push(this.key);
+        }
     }
 
     numVertices() {
@@ -50,6 +56,28 @@ class Model {
             this.translationVelocity[1] *= -0.4;
             this.translation[1] = top;
         }
+        if (this.isAsteroid) {
+            this.checkCollision();
+        }
+    }
+
+    checkCollision() {
+        const pos1 = this.translation
+        Model.nonAsteroidKeys.forEach((key) => {
+            if (Model.models.hasOwnProperty(key)) {
+                const model = Model.models[key];
+                const dist = Math.sqrt(Math.pow(this.translation[0] - model.translation[0], 2) +
+                                       Math.pow(this.translation[1] - model.translation[1], 2));
+                if (dist <= this.colliderRadius + model.colliderRadius) {
+                    this.handleCollision(model);
+                }
+            }
+        });
+    }
+
+    handleCollision(model) {
+        delete Model.models[this.key];
+        delete Model.models[model.key];
     }
 
     isInBounds(bottom, top, left, right) {
