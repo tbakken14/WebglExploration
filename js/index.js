@@ -112,8 +112,8 @@ function startGame() {
 }
 
 const canvas = document.getElementById("game");
-canvas.width = 1000;
-canvas.height = 1000;
+canvas.width = 1400;
+canvas.height = 800;
 const gl = getContext(canvas);
 VertexArrayObject.gl = gl;
 

@@ -14,7 +14,6 @@ class Game {
         this.score += 1;
         const scoreElement = document.getElementById("score");
         scoreElement.innerHTML = "Score: " + this.score;
-
     }
 
     static resetGame() {
