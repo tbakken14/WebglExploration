@@ -29,6 +29,11 @@ class Model {
         this.rotation += this.rotationVelocity;
         this.translation = this.translation.map((e, i) => e + this.translationVelocity[i]);
         this.scalation = this.scalation.map((e, i) => e + this.scalationVelocity[i]);
+        if (!this.isInBounds(bottom, top, left, right)) {
+            if (!this.isBound) {
+                delete Model.models[this.key];
+            }
+        }
         if (this.translation[0] <= left) {
             this.translationVelocity[0] *= -0.4;
             this.translation[0] = left;
@@ -45,6 +50,16 @@ class Model {
             this.translationVelocity[1] *= -0.4;
             this.translation[1] = top;
         }
+    }
+
+    isInBounds(bottom, top, left, right) {
+        if (this.translation[0] <= left ||
+                this.translation[0] >= right ||
+                this.translation[1] <= bottom ||
+                this.translation[1] >= top) {
+            return false;
+        }
+        return true;
     }
 
     createVao() {

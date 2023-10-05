@@ -118,7 +118,7 @@ let model1 = new Model(Shape.CirclePie(30, 20),
 let model2 = new Model(Shape.CircleFan(20, 8), 
                         Color.buildColors(8 - 2, Color.colorX), 
                         0, [250, 350], [1, 2 ], 
-                        0, [.5, -.4], [0, 0], true);
+                        0, [.5, -.4], [0, 0], false);
 //[0, 1000], [1000, 1000], [0, 0]
 let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
