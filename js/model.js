@@ -1,7 +1,12 @@
+import VertexArrayObject from "./vertexArrayObject.js";
+
 class Model {
+    static models = {};
+    static key = 0;
+
     constructor(vertices, colors, rotation, translation, scalation, 
                 rotationVelocity, translationVelocity, scalationVelocity,
-                vao) {
+                isBound) {
         this.vertices = vertices;                       //pixels, array length numVertices * 2
         this.colors = colors;                           //rgb, array length numVertices * 3
         this.rotation = rotation;                       //radians, number
@@ -10,7 +15,10 @@ class Model {
         this.rotationVelocity = rotationVelocity;       //per update, number
         this.translationVelocity = translationVelocity; //per update, number arr length 2
         this.scalationVelocity = scalationVelocity;     //per update, number arr length 2
-        this.vao = vao;
+        this.isBound = isBound;
+        this.key = Model.key++;
+        Model.models[this.key] = this;
+        this.createVao();
     }
 
     numVertices() {
@@ -37,6 +45,13 @@ class Model {
             this.translationVelocity[1] *= -0.4;
             this.translation[1] = top;
         }
+    }
+
+    createVao() {
+        const vao = new VertexArrayObject();
+        vao.bindBuffer(new Float32Array(this.vertices), 0, 2);
+        vao.bindBuffer(new Float32Array(this.colors), 1, 3);
+        this.vao = vao.vao;
     }
 }
 

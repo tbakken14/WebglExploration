@@ -1,24 +1,24 @@
 class VertexArrayObject {
-    constructor(gl, model) {
-        this.gl = gl;
-        this.vao = gl.createVertexArray();
+    static gl;
+    constructor() {
+        this.vao = VertexArrayObject.gl.createVertexArray();
     }
 
     bindBuffer(data, location, size) {
         const buffer = this.createStaticDrawBuffer(data);
-        this.gl.bindVertexArray(this.vao);
-        this.gl.enableVertexAttribArray(location);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.vertexAttribPointer(location, size, this.gl.FLOAT, false, 0, 0);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
-        this.gl.bindVertexArray(null);
+        VertexArrayObject.gl.bindVertexArray(this.vao);
+        VertexArrayObject.gl.enableVertexAttribArray(location);
+        VertexArrayObject.gl.bindBuffer(VertexArrayObject.gl.ARRAY_BUFFER, buffer);
+        VertexArrayObject.gl.vertexAttribPointer(location, size, VertexArrayObject.gl.FLOAT, false, 0, 0);
+        VertexArrayObject.gl.bindBuffer(VertexArrayObject.gl.ARRAY_BUFFER, null);
+        VertexArrayObject.gl.bindVertexArray(null);
     }
 
     createStaticDrawBuffer(data) {
-        const buffer = this.gl.createBuffer();
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        const buffer = VertexArrayObject.gl.createBuffer();
+        VertexArrayObject.gl.bindBuffer(VertexArrayObject.gl.ARRAY_BUFFER, buffer);
+        VertexArrayObject.gl.bufferData(VertexArrayObject.gl.ARRAY_BUFFER, data, VertexArrayObject.gl.STATIC_DRAW);
+        VertexArrayObject.gl.bindBuffer(VertexArrayObject.gl.ARRAY_BUFFER, null);
         return buffer;
     }
 }

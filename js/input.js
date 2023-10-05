@@ -48,7 +48,7 @@ class Input {
         });
     }
 
-    static fireProjectile(projectile, player, models) {
+    static fireProjectile(projectile, player) {
         const speed = 2;
         const spawnedProjectile = new Model([...projectile.vertices], [...projectile.colors],
                 player.rotation, [...player.translation], [...projectile.scalation],
@@ -56,10 +56,7 @@ class Input {
                 [speed * Math.cos(player.rotation), speed * Math.sin(player.rotation)], 
                 [...projectile.scalationVelocity],
                 projectile.vao);
-        spawnedProjectile.translationVelocity = [speed*Math.cos(player.rotation),
-                                                 speed*Math.sin(player.rotation)];
-        spawnedProjectile.translationVelocity.map((e, i) => e + player.translationVelocity[i]);
-        models.push(spawnedProjectile);
+        spawnedProjectile.translationVelocity = spawnedProjectile.translationVelocity.map((e, i) => e + player.translationVelocity[i]);
     }
 }
 

@@ -70,33 +70,35 @@ function getSourceCode() {
 }
 
 //Paint Shape to Canvas
-function drawShape(model, first, count) {
+function drawShape(model) {
     const transformationMatrix = Transform.transformationMatrix(...model.translation,
                                                                 model.rotation,
                                                                 ...model.scalation);
     gl.uniformMatrix3fv(transformationLocation, false, transformationMatrix);
     gl.bindVertexArray(model.vao);
-    gl.drawArrays(gl.TRIANGLES, first, count);
+    gl.drawArrays(gl.TRIANGLES, 0, model.numVertices());
+    gl.bindVertexArray(null);
 }
 
 //Animation Loop
-function drawScene(models) {
+function drawScene() {
     gl.clearColor(.08, .08, .08, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.CULL_FACE);
 
-    models.forEach((model) => {
-        drawShape(model, 0, model.numVertices());
+    Object.values(Model.models).forEach ((model) => {
+        drawShape(model);
         model.update(100, 900, 100, 900);
-    })
+    });
 
-    requestAnimationFrame(() => drawScene(models));
+    requestAnimationFrame(() => drawScene());
 }
 
 const canvas = document.getElementById("demo");
 canvas.width = 1000;
 canvas.height = 1000;
 const gl = getContext(canvas);
+VertexArrayObject.gl = gl;
 
 const sourceCode = getSourceCode();
 
@@ -112,28 +114,19 @@ gl.useProgram(shaderProgram);
 let model1 = new Model(Shape.CirclePie(30, 20), 
                         Color.buildColors(20, Color.colorX, true), 
                         0, [150, 100], [5, 2], 
-                        0, [.2, .3], [0, 0]);
+                        0, [.2, .3], [0, 0], true);
 let model2 = new Model(Shape.CircleFan(20, 8), 
                         Color.buildColors(8 - 2, Color.colorX), 
                         0, [250, 350], [1, 2 ], 
-                        0, [.5, -.4], [0, 0]);
+                        0, [.5, -.4], [0, 0], true);
 //[0, 1000], [1000, 1000], [0, 0]
 let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
-                        0, [0, 0], [0, 0]);
-const models = [model1, model2, model3];
+                        0, [0, 0], [0, 0], true);
 
-const vertexPositionAttributeLoc = gl.getAttribLocation(shaderProgram, 'pos');
-const vertexColorAttributeLoc = gl.getAttribLocation(shaderProgram, 'vertexColor');
-models.forEach((model) => {
-    const vao = new VertexArrayObject(gl);
-    vao.bindBuffer(new Float32Array(model.vertices), vertexPositionAttributeLoc, 2);
-    vao.bindBuffer(new Float32Array(model.colors), vertexColorAttributeLoc, 3);
-    model.vao = vao.vao;
-});
 
-Input.addKeyboardInputListeners(document, model3, model2, models);
+Input.addKeyboardInputListeners(document, model3, model2);
 
 
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
@@ -147,9 +140,6 @@ const transformationLocation = gl.getUniformLocation(shaderProgram, "u_transform
 const colorLocation = gl.getUniformLocation(shaderProgram, "u_color");
 gl.uniform4f(colorLocation, ...[0, 0, 0, 0]);
 
-gl.enableVertexAttribArray(vertexPositionAttributeLoc);
-gl.enableVertexAttribArray(vertexColorAttributeLoc);
-
 
 //Start loop
-requestAnimationFrame(() => drawScene(models));
+requestAnimationFrame(() => drawScene());
