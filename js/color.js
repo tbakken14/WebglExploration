@@ -7,6 +7,10 @@ class Color {
                      0, 0, 1,
                      0, 0, 0];
 
+    static projectile = [0, 0, 0,
+                         .192, 1, .192,
+                         0, 0, 0]
+
     static solidColor(r, g, b) {
         return [r, g, b,
                 r, g, b,
