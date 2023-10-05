@@ -3,7 +3,8 @@ body {
     width: 100vw;
     background-color: rgb(160, 160, 230);
     padding: 0px;
-    margin: 0px;
+    text-align: center;
+    margin: auto;
 }
 
 #game {
@@ -16,10 +17,16 @@ img {
     height: 300px;
     object-fit: cover;
     display: block;
-    text-align: center;
     margin: auto auto 10px auto;
 }
 
 h2 {
     text-align: center;
+}
+
+#gameOver {
+    color: white;
+    position: absolute;
+    top: 50%;
+    width: 100vw;
 }

@@ -2,12 +2,28 @@ import Model from "./model.js";
 import Spawn from "./spawn.js";
 
 class Game {
+    static startGame;
     static isEndGame = false;
     static score = 0;
 
 
     static endGame() {
         this.isEndGame = true;
+        let body = document.getElementsByTagName("body")[0];
+        let gameOverElement = document.createElement("h1");
+        gameOverElement.setAttribute("id", "gameOver");
+        gameOverElement.innerHTML = "Game Over";
+        body.appendChild(gameOverElement);
+
+        let newGameButton = document.createElement("button");
+        newGameButton.setAttribute("id", "newGame");
+        newGameButton.innerHTML = "New Game";
+        newGameButton.onclick = () => {
+            gameOverElement.remove();
+            newGameButton.remove(); 
+            Game.startGame();
+        };
+        body.appendChild(newGameButton);
     }
     
     static incrementScore() {

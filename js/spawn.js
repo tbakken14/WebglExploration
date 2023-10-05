@@ -45,8 +45,8 @@ class Spawn {
     }
 
     static #getSpawnLocation() {
-        const width = 1000;
-        const height = 1000;
+        const width = 1400;
+        const height = 800;
         const perimeterPercent = Math.random();
         if (perimeterPercent < .25) {
             return [0, perimeterPercent * height];

@@ -94,7 +94,7 @@ function drawScene() {
 
     Object.values(Model.models).forEach ((model) => {
         drawShape(model);
-        model.update(0, 1000, 0, 1000);
+        model.update(0, canvas.height, 0, canvas.width);
     });
 
     Spawn.spawnHandler();
@@ -106,10 +106,11 @@ function drawScene() {
     }
 }
 
-function startGame() {
+Game.startGame = function () {
     Game.resetGame();
     requestAnimationFrame(() => drawScene());
 }
+
 
 const canvas = document.getElementById("game");
 canvas.width = 1400;
@@ -138,4 +139,4 @@ gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 //rasterizer 
 gl.viewport(0, 0, canvas.width, canvas.height);
 
-startGame();
+Game.startGame();
