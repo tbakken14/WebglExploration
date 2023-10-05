@@ -3,9 +3,9 @@ class Color {
                   0, .5, 2,
                   .5, .7, 0 ];
 
-    static colorX = [0, 0, 0,
-                     0, 0, 1,
-                     0, 0, 0];
+    static asteroid = [.25, .43, .6,
+                       .85, .63, 0,
+                       .08, .08, .08];
 
     static projectile = [0, 0, 0,
                          .192, 1, .192,
@@ -35,7 +35,6 @@ class Color {
             const row = Math.floor(i / 3);
             const col = i % 3;
             const i_prime = 3 * (2 - row) + col;
-            //console.log(i_prime)
             return a[i_prime];
         })
     }

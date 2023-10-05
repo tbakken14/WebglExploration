@@ -111,22 +111,21 @@ gl.useProgram(shaderProgram);
 
 //input assembler
 //Create geometry models
-let model1 = new Model(Shape.CirclePie(30, 20), 
-                        Color.buildColors(20, Color.colorX, true), 
+const asteroid = new Model(Shape.CirclePie(30, 10), 
+                        Color.buildColors(10, Color.asteroid, true), 
                         0, [150, 100], [5, 2], 
                         0, [.2, .3], [0, 0], true);
-let model2 = new Model(Shape.CirclePie(20, 20), 
+const projectile = new Model(Shape.CirclePie(20, 20), 
                         Color.buildColors(20, Color.projectile), 
-                        0, [250, 350], [.5, .5], 
-                        0, [.5, -.4], [0, 0], false);
-//[0, 1000], [1000, 1000], [0, 0]
-let model3 = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
+                        0, [0, 0], [.5, .5], 
+                        0, [0, 0], [0, 0], false); 
+const player = new Model(Shape.Rectangle(20, 20).concat(Shape.Triangle([50, 0], [10, 10], [10, -10])),
                         Color.buildColors(3, Color.solidColor(.8, .2, .7)),
                         0, [400, 400], [1, 1], 
                         0, [0, 0], [0, 0], true);
 
 
-Input.addKeyboardInputListeners(document, model3, model2);
+Input.addKeyboardInputListeners(document, player, projectile);
 
 
 const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "u_res");
