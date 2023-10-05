@@ -2,10 +2,10 @@ import Shape from "./shape.js";
 import Color from "./color.js";
 import Model from "./model.js";
 import Transform from "./transform.js";
-import VertexArrayObject from "./vertexarrayobject.js";
 import Input from "./input.js";
 import Spawn from "./spawn.js";
 import Game from "./game.js";
+import VertexArrayObject from "./vertexarrayobject.js";
 
 //Create shader
 function createShader(gl, sourceCode, type) {
