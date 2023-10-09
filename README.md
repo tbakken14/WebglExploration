@@ -1,37 +1,62 @@
-# _Webgl Exploration_
+# _Asteroid Renaissance_
 
 #### By _**Thomas Bakken**_
 
-#### _An application to explore webgl2 by making a rudimentary game._
+#### _An application to explore Webgl2 fundamentals by making a 2-dimensional game._
 
 ## Technologies Used
 
 * _Webgl2_
-* _React.js_
-* _Node.js_
 * _Javascipt_
-* _Html_
+* _HTML_
 * _CSS_
 
 ## Description
 
-_This game is rendered using webgl2. The user can click to start a game and accumulate a score. The user will also be able to view a leaderboard. Currently the website displays a canvas with rectangles of random dimension and color._
+_A 2-dimensional game built using Webgl2. The user control the movement of a spacecraft with WASD/Arrow Keys and fires projectiles using the Spacebar. The objective is to accumulate points by shooting asteroids while avoiding a collision with the spacecraft._
 
 ## Setup/Installation Requirements
 
-* _Node Setup_
-  * _Download and install Node.js_
-  * _Verify compatibility with node version v18.16.0 and npm version 9.5.1_
-* _Navigate to the root project directory_
-* _Run the node server with bash command: $ npm start_
-* _Use a modern browser compatible with Webgl2
+* _Clone the repository_
+* _Open with VS code or your prefered code editor_
+* _Use a modern browser compatible with Webgl2_
+* _Start a live server to run the application locally_
 
 ## Known Bugs
 
-* Not implemented
+* _The asteroid spawn rate is not reset in new games_
+
+## Future Work
+
+* _Balance the game to avoid over powered strategies_
+* _Add reload time_
+* _Add ammo capacity_
+* _Add upgrades (reload speed, ammo capacity, movement speed, etc.)_
+* _Add no timed survival mode with no ammo_
+* _Improve artwork_
+* _Add React.js frontend_
+* _Add leaderboard (backend api and database)_
 
 ## License
 
-_MIT_
+MIT License
 
-Copyright (c) _9/20/2023_ _Thomas Bakken_
+Copyright (c) 2023 Thomas Bakken
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
