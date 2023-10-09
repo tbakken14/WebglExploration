@@ -4,6 +4,8 @@
 
 #### _An application to explore Webgl2 fundamentals by making a 2-dimensional game._
 
+#### _Play the game at: https://tbakken14.github.io/WebglExploration/_
+
 ## Technologies Used
 
 * _Webgl2_
