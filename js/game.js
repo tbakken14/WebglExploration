@@ -8,7 +8,7 @@ class Game {
 
 
     static endGame() {
-        this.isEndGame = true;
+        Game.isEndGame = true;
         let body = document.getElementsByTagName("body")[0];
         let gameOverElement = document.createElement("h1");
         gameOverElement.setAttribute("id", "gameOver");
