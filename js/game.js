@@ -1,5 +1,6 @@
 import Model from "./model.js";
 import Spawn from "./spawn.js";
+import Profile from "./profile.js";
 
 class Game {
     static startGame;
@@ -21,9 +22,28 @@ class Game {
         newGameButton.onclick = () => {
             gameOverElement.remove();
             newGameButton.remove(); 
+            upgradeAmmoButton.remove(); 
+            upgradeSpeedButton.remove(); 
             Game.startGame();
         };
+
+        let upgradeAmmoButton = document.createElement("button");
+        upgradeAmmoButton.setAttribute("id", "upgradeAmmo");
+        upgradeAmmoButton.innerHTML = "Upgrade Ammo";
+        upgradeAmmoButton.onclick = () => {
+            Profile.upgradeAmmo();
+        }
+
+        let upgradeSpeedButton = document.createElement("button");
+        upgradeSpeedButton.setAttribute("id", "upgradeSpeed");
+        upgradeSpeedButton.innerHTML = "Upgrade Speed";
+        upgradeSpeedButton.onclick = () => {
+            Profile.upgradeSpeed();
+        }
+
         body.appendChild(newGameButton);
+        body.appendChild(upgradeSpeedButton);
+        body.appendChild(upgradeAmmoButton);
     }
     
     static incrementScore() {
