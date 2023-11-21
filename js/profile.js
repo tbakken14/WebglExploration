@@ -1,6 +1,6 @@
 class Profile {
     static lives = 3;
-    static money = 0;
+    static money = 100;
     static speed = 1;
     static reload = 5;
     static ammo = 1;
@@ -14,38 +14,34 @@ class Profile {
     }
 
     static buyLife() {
-        cost = Profile.extraLifeCost;
-        if (Profile.validateFunds(cost)) {
-            Profile.money -= cost;
+        if (Profile.validateFunds(Profile.extraLifeCost)) {
+            Profile.money -= Profile.extraLifeCost;
             Profile.extraLifeCost += 100;
             Profile.lives += 1;
         }
     }
 
-    static updradeAmmo() {
-        cost = Profile.upgradeAmmoCost;
-        if (Profile.validateFunds(cost)) {
-            Profile.money -= cost;
+    static upgradeAmmo() {
+        if (Profile.validateFunds(Profile.upgradeAmmoCost)) {
+            Profile.money -= Profile.upgradeAmmoCost;
             Profile.upgradeAmmoCost += 100;
             Profile.ammo += 1;
         }
     }
 
     static upgradeReload() {
-        cost = Profile.upgradeReloadCost;
-        if (Profile.validateFunds(cost)) {
-            Profile.money -= cost;
+        if (Profile.validateFunds(Profile.upgradeReloadCost)) {
+            Profile.money -= Profile.upgradeReloadCost;
             Profile.upgradeReloadCost += 100;
             Profile.reload *= .95;
         }
     }
 
     static upgradeSpeed() {
-        cost = Profile.upgradeSpeedCost;
         if (Profile.validateFunds(Profile.upgradeSpeedCost)) {
-            Profile.money -= cost;
+            Profile.money -= Profile.upgradeSpeedCost;
             Profile.upgradeSpeedCost += 100;
-            Profile.speed *= 1.05
+            Profile.speed *= 1.05;
         }
     }
 
