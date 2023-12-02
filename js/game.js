@@ -1,21 +1,25 @@
 import Model from "./model.js";
 import Spawn from "./spawn.js";
-import Profile from "./profile.js";
+import GUI from "./GUI.js";
 
 class Game {
     static startGame;
     static isEndGame = false;
     static score = 0;
+    static gui = new GUI();
 
 
     static endGame() {
         Game.isEndGame = true;
         let body = document.getElementsByTagName("body")[0];
+        let gameView = document.getElementById("gameView");
         let gameOverElement = document.createElement("h1");
         gameOverElement.setAttribute("id", "gameOver");
         gameOverElement.innerHTML = "Game Over";
-        body.appendChild(gameOverElement);
+        gameView.appendChild(gameOverElement);
 
+        this.gui.showElements(this.gui.upgradeButtons);
+        /*
         let newGameButton = document.createElement("button");
         newGameButton.setAttribute("id", "newGame");
         newGameButton.innerHTML = "New Game";
@@ -44,6 +48,7 @@ class Game {
         body.appendChild(newGameButton);
         body.appendChild(upgradeSpeedButton);
         body.appendChild(upgradeAmmoButton);
+        */
     }
     
     static incrementScore() {
